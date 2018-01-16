@@ -39,7 +39,20 @@ class SubmitReplyTest extends TestCase
             $reply->toArray()
         );
         $reponse = $this->get($thread->route);
-
         $reponse->assertSee($reply->body);
+    }
+    
+
+    /** @test */
+    public function an_reply_requires_a_body()
+    {
+        $this->withExceptionHandling()->signIn();
+        $thread = create(\App\Thread::class);
+        $reply = make(\App\Reply::class, ['body' => null]);
+
+        $this->post(route('threads.replies.store', [
+            'channel' => $thread->channel->id,
+            'thread' => $thread->id
+        ]), $reply->toArray())->assertSessionHasErrors('body');
     }
 }
