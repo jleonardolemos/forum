@@ -66,4 +66,16 @@ class CreateThreadsTest extends TestCase
         $thread = make(\App\Thread::class, $overrides);
         return $this->post(route('threads.store'), $overrides);
     }
+
+    /** @test*/
+    public function an_authenticated_user_can_see_thread_according_with_a_channel()
+    {
+        $channel = create(\App\Channel::class);
+        $threadInChannel = create(\App\Thread::class, ['channel_id' => $channel->id]);
+        $threadNotInChannel = create(\App\Thread::class);
+
+        $this->get(route('threads.index', ['channel' => $channel->slug]))
+            ->assertSee($threadInChannel->title)
+            ->assertDontSee($threadNotInChannel->title);
+    }
 }
