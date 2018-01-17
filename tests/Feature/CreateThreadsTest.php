@@ -68,7 +68,7 @@ class CreateThreadsTest extends TestCase
     }
 
     /** @test*/
-    public function an_authenticated_user_can_see_thread_according_with_a_channel()
+    public function an_user_can_see_threads_according_with_a_channel()
     {
         $channel = create(\App\Channel::class);
         $threadInChannel = create(\App\Thread::class, ['channel_id' => $channel->id]);
@@ -77,5 +77,12 @@ class CreateThreadsTest extends TestCase
         $this->get(route('threads.index', ['channel' => $channel->slug]))
             ->assertSee($threadInChannel->title)
             ->assertDontSee($threadNotInChannel->title);
+    }
+
+    /** @test*/
+    public function an_user_can_see_channels_in_nav_bar()
+    {
+        $channel = create(\App\Channel::class);
+        $this->get(route('threads.index'))->assertSee($channel->name);
     }
 }
