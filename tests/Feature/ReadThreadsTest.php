@@ -53,4 +53,16 @@ class ThreadsTest extends TestCase
             $reply->owner->name . ' said ' . $reply->created_at->diffForHumans()
         )->assertSee($reply->body);
     }
+
+    /** @test */
+    public function a_user_can_filter_threads_by_user_name()
+    {
+        $user = create(\App\User::class);
+        $threadByUser = create(\App\Thread::class, ['user_id' => $user->id]);
+        $threadNotByUser = create(\App\Thread::class);
+
+        $this->get(route('threads.index', [null, 'user' => $user->name]))
+            ->assertSee($threadByUser->title)
+            ->assertDontSee($threadNotByUser->title);
+    }
 }
