@@ -42,7 +42,7 @@
                             <ul class="dropdown-menu">
                                 <li><a href="{{ route('threads.index') }}">All Threads</a></li>
                                 @if(auth()->check())
-                                <li><a href="{{ route('threads.index', [null, 'user' => auth()->user()->name]) }}">Threads by {{ auth()->user()->name }}</a></li>
+                                <li><a href="{{ route('threads.index', [null, 'by' => auth()->user()->name]) }}">Threads by {{ auth()->user()->name }}</a></li>
                                 @endif
                             </ul>
                         </li>                        

@@ -3,23 +3,21 @@
 @section('content')
 <div class="container">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-8">
             <div class="panel panel-default">
                 <div class="panel-heading">Thread - {{ $thread->title }}</div>
                 <div class="panel-body">
                     <div class="body">{{ $thread->body }}</div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    @foreach($thread->replies as $reply)
-        @include('threads.reply')
-    @endforeach
+            @foreach($replies as $reply)
+                @include('threads.reply')
+            @endforeach
 
-    @if(auth()->check())
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
+            {!! $replies->links() !!}
+
+            @if(auth()->check())
             <form action="{{ route('threads.replies.store', ['channel' => $thread->channel->slug, 'thread' => $thread->id]) }}" method="post">
                 {{ csrf_field() }}
                 <div class="form-group">
@@ -28,10 +26,20 @@
 
                 <button class="btn btn-info">Send</button>
             </form>
+            @else
+            <p class="text-center">Please <a href="{{ route('login') }}">sign in</a> to contribute </p>
+            @endif
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <p>
+                        This thread was published {{ $thread->created_at->diffForHumans() }} by <a href="#">{{ $thread->creator->name }}</a>,
+                        and currently has {{ $thread->replies_count }} {{ str_plural('comment', $thread->replies_count) }}.
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
-    @else
-    <p class="text-center">Please <a href="{{ route('login') }}">sign in</a> to contribute </p>
-    @endif
 </div>
 @endsection

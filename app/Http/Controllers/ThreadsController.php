@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Filters\ThreadFilters;
 use App\Thread;
 use App\Channel;
 use App\User;
@@ -15,21 +16,21 @@ class ThreadsController extends Controller
         $this->middleware('auth')->except('index', 'show');
     }
 
-    public function index(Channel $channel)
+    public function index(Channel $channel, ThreadFilters $filters)
     {
+        $threads = $this->getThreads($channel, $filters);
+        return view('threads.index', compact('threads'));
+    }
+
+    private function getThreads($channel, $filters)
+    {
+        $threadsBuilder = Thread::latest()->filter($filters);
+
         if ($channel->id) {
-            $threadsBuilder = $channel->threads()->latest();
-        } else {
-            $threadsBuilder = Thread::latest();
-        }
-        
-        if (request('user')) {
-            $user = User::where('name', request('user'))->firstOrFail();
-            $threadsBuilder->where('user_id', $user->id);
+            $threadsBuilder->where('channel_id', $channel->id);
         }
 
-        $threads = $threadsBuilder->get();
-        return view('threads.index', compact('threads'));
+        return $threadsBuilder->get();
     }
 
     public function create()
@@ -58,6 +59,9 @@ class ThreadsController extends Controller
 
     public function show($chanelId, Thread $thread)
     {
-        return view('threads.show', compact('thread'));
+        return view('threads.show', [
+            'thread' => $thread,
+            'replies' => $thread->replies()->paginate(1)
+        ]);
     }
 }

@@ -9,6 +9,14 @@ class Thread extends Model
 
     protected $guarded = [];
 
+    protected static function boot()
+    {
+        parent::boot();
+        static::addGlobalScope('replyCount', function ($query) {
+            $query->withCount('replies');
+        });
+    }
+
     public function getRouteAttribute()
     {
         return route('threads.show', [
@@ -35,5 +43,10 @@ class Thread extends Model
     public function channel()
     {
         return $this->belongsTo(Channel::class);
+    }
+
+    public function scopeFilter($query, $filters)
+    {
+        $filters->apply($query);
     }
 }

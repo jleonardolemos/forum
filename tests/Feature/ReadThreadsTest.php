@@ -61,7 +61,7 @@ class ThreadsTest extends TestCase
         $threadByUser = create(\App\Thread::class, ['user_id' => $user->id]);
         $threadNotByUser = create(\App\Thread::class);
 
-        $this->get(route('threads.index', [null, 'user' => $user->name]))
+        $this->get(route('threads.index', [null, 'by' => $user->name]))
             ->assertSee($threadByUser->title)
             ->assertDontSee($threadNotByUser->title);
     }
