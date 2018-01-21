@@ -12,6 +12,16 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
+    <style>
+        .level {
+            display: flex;
+            align-items: center;
+        }
+        .flex {
+            flex: 1;
+        }
+    </style>
 </head>
 <body>
     <div id="app">
@@ -44,6 +54,7 @@
                                 @if(auth()->check())
                                 <li><a href="{{ route('threads.index', [null, 'by' => auth()->user()->name]) }}">Threads by {{ auth()->user()->name }}</a></li>
                                 @endif
+                                <li><a href="{{ route('threads.index', [null, 'popular' => 1]) }}">Hot threads</a></li>
                             </ul>
                         </li>                        
                         <li><a href="{{ route('threads.create') }}">New Thread</a></li>
