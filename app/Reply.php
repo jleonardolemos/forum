@@ -27,9 +27,8 @@ class Reply extends Model
     public function favorite()
     {
         $userId = auth()->user()->id;
-        if (!$this->favorites()->where('user_id', $userId)->exists()) {
+        !$this->favorites()->where('user_id', $userId)->exists() &&
             $this->favorites()->create(['user_id' => $userId]);
-        }
     }
 
     public function isFavorite()

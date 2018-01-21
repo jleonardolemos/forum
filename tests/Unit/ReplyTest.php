@@ -30,4 +30,33 @@ class ReplyTest extends TestCase
     {
         $this->assertInstanceOf(\App\Thread::class, $this->reply->thread);
     }
+
+    /** @teste*/
+    public function it_has_many_favorits()
+    {
+        $user1 = create(\App\User::class);
+        $user2 = create(\App\User::class);
+        $reply = create(\App\Reply::class);
+
+        $this->signIn($user1);
+        $reply->favorite();
+        $this->signIn($user2);
+        $reply->favorite();
+
+        $this->assertEquals($reply->favorites()->count(), 2);
+    }
+
+    /** @teste*/
+    public function it_can_check_for_favorites()
+    {
+        $user1 = create(\App\User::class);
+        $user2 = create(\App\User::class);
+        $reply = create(\App\Reply::class);
+
+        $this->signIn($user1);
+        $reply->favorite();
+        $this->assertTrue($reply->IsFavorite());
+        $this->signIn($user2);
+        $this->assertFalse($reply->IsFavorite());
+    }
 }
