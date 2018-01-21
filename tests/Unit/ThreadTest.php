@@ -63,4 +63,16 @@ class ThreadTest extends TestCase
         $thread = create(\App\Thread::class);
         $this->assertInstanceOf(\App\Channel::class, $thread->channel);
     }
+
+    /** @test*/
+    public function it_can_be_filtered_by_user()
+    {
+        $user = create(\App\User::class);
+        $threadByUser = create(\App\Thread::class, ['user_id' => $user->id]);
+        $threadNotByUser = create(\App\Thread::class);
+
+        $request = request()->replace(['by' => $user->name]);
+
+        $this->assertTrue(\App\Thread::filter(new \App\Filters\ThreadFilters(request()))->get()->count() == 1);
+    }
 }
