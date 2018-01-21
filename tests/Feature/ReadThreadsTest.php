@@ -49,9 +49,9 @@ class ThreadsTest extends TestCase
 
         $response = $this->get($this->thread->route);
 
-        $response->assertSee(
-            $reply->owner->name . ' said ' . $reply->created_at->diffForHumans()
-        )->assertSee($reply->body);
+        $response->assertSee('said ' . $reply->created_at->diffForHumans())
+            ->assertSee($reply->owner->name)
+            ->assertSee($reply->body);
     }
 
     /** @test */
