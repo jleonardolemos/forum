@@ -29,7 +29,7 @@ class ThreadsController extends Controller
 
     private function getThreads($channel, $filters)
     {
-        $threadsBuilder = Thread::with('channel')->latest()->filter($filters);
+        $threadsBuilder = Thread::latest()->filter($filters);
 
         if ($channel->id) {
             $threadsBuilder->where('channel_id', $channel->id);

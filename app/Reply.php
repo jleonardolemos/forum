@@ -3,11 +3,16 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Favoritable;
 
 class Reply extends Model
 {
 
+    use Favoritable;
+
     protected $guarded = [];
+
+    protected $with = ['owner', 'favorites'];
 
     public function owner()
     {
@@ -22,23 +27,5 @@ class Reply extends Model
     public function favorites()
     {
         return $this->morphMany(Favorite::class, 'favorited');
-    }
-
-    public function favorite()
-    {
-        $userId = auth()->user()->id;
-        !$this->favorites()->where('user_id', $userId)->exists() &&
-            $this->favorites()->create(['user_id' => $userId]);
-    }
-
-    public function isFavorite()
-    {
-        if (auth()->user()) {
-            return $this->favorites()
-                ->where('user_id', auth()->user()->id)
-                ->exists();
-        }
-
-        return true;
     }
 }
