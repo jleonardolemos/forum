@@ -69,4 +69,15 @@ class ThreadsController extends Controller
             'replies' => $thread->replies()->paginate(20)
         ]);
     }
+
+    public function destroy($chanelId, Thread $thread)
+    {
+        $thread->delete();
+
+        if (request()->wantsJson()) {
+            return response([], 204);
+        }
+
+        return redirect(route('threads.index'));
+    }
 }

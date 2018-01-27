@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class ThreadsTest extends TestCase
+class ManageThreadsTest extends TestCase
 {
 
     use DatabaseMigrations;
@@ -79,5 +79,35 @@ class ThreadsTest extends TestCase
 
         $response = $this->getJson(route('threads.index', [null, 'popular' => '1']))->json();
         $this->assertEquals([3, 2, 0], array_column($response, 'replies_count'));
+    }
+
+    /** @test */
+    public function a_guest_can_not_delete_threads()
+    {
+        $this->withExceptionHandling();
+        $reply = create(\App\Reply::class);
+
+        $reponse = $this->delete(route('threads.delete', [
+            'channel' => $reply->thread->channel->slug,
+            'thread' => $reply->thread->id,
+        ]), ['id' => $reply->thread->id]);
+
+        $reponse->assertRedirect(route('login'));
+    }
+
+    /** @test */
+    public function a_authenticated_user_can_delete_threads()
+    {
+        $this->signIn();
+        $reply = create(\App\Reply::class);
+
+        $reponse = $this->json('delete', route('threads.delete', [
+            'channel' => $reply->thread->channel->slug,
+            'thread' => $reply->thread->id,
+        ]), ['id' => $reply->thread->id]);
+
+        $reponse->assertStatus(204);
+        $this->assertDatabaseMissing('threads', ['id' => $reply->thread->id]);
+        $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
     }
 }
