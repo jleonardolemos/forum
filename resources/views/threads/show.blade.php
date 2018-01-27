@@ -5,7 +5,23 @@
     <div class="row">
         <div class="col-md-8">
             <div class="panel panel-default">
-                <div class="panel-heading">Thread - {{ $thread->title }}</div>
+                <div class="panel-heading">
+                    <div class="level">
+                        <span class="flex">
+                            <a href="{{ route('users.show', $thread->creator->name) }}">{{ $thread->creator->name }}</a>
+                            {{ $thread->title }}
+                        </span>
+
+                        <form action="{{ route('threads.delete', [
+                            'channel' => $thread->channel->slug,
+                            'thread' => $thread->id,
+                        ]) }}" method="POST">
+                            {{ csrf_field() }}
+                            {{ method_field('delete') }}
+                            <button class="btn btn-danger">Delete</button>
+                        </form>
+                    </div>
+                </div>
                 <div class="panel-body">
                     <div class="body">{{ $thread->body }}</div>
                 </div>
