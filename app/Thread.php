@@ -4,8 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+use App\Activityable;
+
 class Thread extends Model
 {
+    use Activityable;
 
     protected $guarded = [];
 

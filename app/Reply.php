@@ -3,12 +3,13 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Activityable;
 use App\Favoritable;
 
 class Reply extends Model
 {
 
-    use Favoritable;
+    use Favoritable, Activityable;
 
     protected $guarded = [];
 
