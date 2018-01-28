@@ -12,6 +12,7 @@
                             {{ $thread->title }}
                         </span>
 
+                        @can('delete', $thread)
                         <form action="{{ route('threads.delete', [
                             'channel' => $thread->channel->slug,
                             'thread' => $thread->id,
@@ -20,6 +21,7 @@
                             {{ method_field('delete') }}
                             <button class="btn btn-danger">Delete</button>
                         </form>
+                        @endcan
                     </div>
                 </div>
                 <div class="panel-body">

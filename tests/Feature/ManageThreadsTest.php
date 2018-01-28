@@ -82,24 +82,36 @@ class ManageThreadsTest extends TestCase
     }
 
     /** @test */
-    public function a_guest_can_not_delete_threads()
+    public function a_unauthorized_user_can_not_delete_threads()
     {
         $this->withExceptionHandling();
         $reply = create(\App\Reply::class);
 
+        #GUEST TEST
         $reponse = $this->delete(route('threads.delete', [
             'channel' => $reply->thread->channel->slug,
             'thread' => $reply->thread->id,
         ]), ['id' => $reply->thread->id]);
 
         $reponse->assertRedirect(route('login'));
+        #GUEST TEST
+
+        #BAD USER TEST
+        $this->signIn(create(\App\User::class));
+        $reponse = $this->delete(route('threads.delete', [
+            'channel' => $reply->thread->channel->slug,
+            'thread' => $reply->thread->id,
+        ]), ['id' => $reply->thread->id]);
+
+        $reponse->assertStatus(403);
+        #BAD USER TEST
     }
 
     /** @test */
-    public function a_authenticated_user_can_delete_threads()
+    public function a_authorized_user_can_delete_threads()
     {
-        $this->signIn();
         $reply = create(\App\Reply::class);
+        $this->signIn($reply->thread->creator);
 
         $reponse = $this->json('delete', route('threads.delete', [
             'channel' => $reply->thread->channel->slug,
