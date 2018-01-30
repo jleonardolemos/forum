@@ -41,4 +41,22 @@ class ActivityTest extends TestCase
 
         $this->assertEquals(\App\Activity::count(), 2);
     }
+
+        /** @test*/
+    public function it_can_return_a_feed_for_a_specific_user()
+    {
+        $this->signIn();
+        create(\App\Thread::class, ['user_id' => auth()->user()->id], 5);
+        auth()->user()->activities()->first()->update([
+            'created_at' => \Carbon\Carbon::now()->subWeek()
+        ]);
+
+        $activities = \App\Activity::feed(auth()->user());
+        $this->assertTrue(
+            $activities->keys()->contains(\Carbon\Carbon::now()->format('y-m-d'))
+        );
+        $this->assertTrue(
+            $activities->keys()->contains(\Carbon\Carbon::now()->subWeek()->format('y-m-d'))
+        );
+    }
 }
