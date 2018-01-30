@@ -42,6 +42,11 @@ if (token) {
  * for events that are broadcast by Laravel. Echo and event broadcasting
  * allows your team to easily build robust real-time web applications.
  */
+window.Vue = require('vue');
+window.events = new Vue();
+window.flash = function (message) {
+    window.events.$emit('flash', message);
+};
 
 // import Echo from 'laravel-echo'
 

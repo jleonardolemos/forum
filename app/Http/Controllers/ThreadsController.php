@@ -59,7 +59,7 @@ class ThreadsController extends Controller
             'body' => $request->body,
         ]);
 
-        return redirect($thread->route);
+        return redirect($thread->route)->with('flash', 'Thread created');
     }
 
     public function show($chanelId, Thread $thread)

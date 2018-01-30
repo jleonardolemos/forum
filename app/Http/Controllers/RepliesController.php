@@ -24,6 +24,6 @@ class RepliesController extends Controller
             'user_id' => auth()->user()->id
         ]);
 
-        return back();
+        return back()->with('flash', 'Reply left');
     }
 }
