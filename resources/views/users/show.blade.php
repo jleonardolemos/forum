@@ -10,22 +10,13 @@
                     <small>{{ $profileUser->created_at->diffForHumans() }}</small>
                 </h1>
             </div>
-            @foreach($threads as $thread)
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <div class="level">
-                        <span class="flex">
-                <a href="{{ route('users.show', $thread->creator->name) }}">{{ $thread->creator->name }}</a>
-                {{ $thread->title }}
-            </span>
-                        <span>{{ $thread->created_at->diffForHumans() }}</span>
-                    </div>
-                </div>
-                <div class="panel-body">
-                    {{ $thread->body }}
-                </div>
-            </div>
-            @endforeach {{ $threads->links() }}
+            @foreach($dates as $date => $activities)
+                <h3 class="page-header">{{ $date }}</h3>
+                @foreach($activities as $activity)
+                @include('users.activities.' . $activity->type)
+                @endforeach 
+            @endforeach 
+            {{--  {{ $threads->links() }}  --}}
         </div>
     </div>
 </div>

@@ -11,7 +11,17 @@ class UsersController extends Controller
     {
         return view('users.show', [
             'profileUser' => $user,
-            'threads' => $user->threads()->latest()->paginate(10)
+            'dates' => $this->getActivities($user)
         ]);
+    }
+
+    private function getActivities($user)
+    {
+        return $user->activities()
+            ->latest()
+            ->get()
+            ->groupBy(function ($activity) {
+                return $activity->created_at->format('y-m-d');
+            });
     }
 }

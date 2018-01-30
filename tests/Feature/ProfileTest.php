@@ -18,12 +18,13 @@ class ProfileTest extends TestCase
     }
 
     /** @test */
-    public function a_user_has_many_threads_in_your_profile()
+    public function a_user_has_many_activities_in_your_profile()
     {
-        $user = create(\App\User::class);
+        $this->signIn($user = create(\App\User::class));
         $thread1 = create(\App\Thread::class, ['user_id' => $user->id]);
         $thread2 = create(\App\Thread::class, ['user_id' => $user->id]);
-        $thread3 = create(\App\Thread::class);
+        $this->signIn($user2 = create(\App\User::class));
+        $thread3 = create(\App\Thread::class, ['user_id' => $user2->id]);
 
         $this->get(route('users.show', $user->name))
             ->assertSee($thread1->title)

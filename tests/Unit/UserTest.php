@@ -25,4 +25,12 @@ class UserTest extends TestCase
         $this->assertEquals($user->threads->first()->title, $t1->title);
         $this->assertEquals($user->threads->last()->title, $t2->title);
     }
+
+    /** @test*/
+    public function it_has_many_activities()
+    {
+        $this->signIn($user = create(\App\User::class));
+        create(\App\Reply::class, ['user_id' => $user->id]);
+        $this->assertEquals($user->activities()->count(), 2);
+    }
 }
