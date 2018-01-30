@@ -21,6 +21,10 @@ trait Activityable
                 ]);
             });
         }
+
+        static::deleting(function ($model) {
+            $model->activities()->delete();
+        });
     }
 
     protected static function getEventsToReact()

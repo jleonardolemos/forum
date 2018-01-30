@@ -110,16 +110,23 @@ class ManageThreadsTest extends TestCase
     /** @test */
     public function a_authorized_user_can_delete_threads()
     {
-        $reply = create(\App\Reply::class);
-        $this->signIn($reply->thread->creator);
+        $this->signIn();
+        $thread = create(\App\Thread::class, [
+            'user_id' => auth()->user()->id
+        ]);
+        $reply = create(\App\Reply::class, [
+            'user_id' => auth()->user()->id,
+            'thread_id' => $thread->id,
+        ]);
 
         $reponse = $this->json('delete', route('threads.delete', [
-            'channel' => $reply->thread->channel->slug,
-            'thread' => $reply->thread->id,
-        ]), ['id' => $reply->thread->id]);
+            'channel' => $thread->channel->slug,
+            'thread' => $thread->id,
+        ]), ['id' => $thread->id]);
 
         $reponse->assertStatus(204);
-        $this->assertDatabaseMissing('threads', ['id' => $reply->thread->id]);
+        $this->assertDatabaseMissing('threads', ['id' => $thread->id]);
         $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
+        $this->assertEquals(0, \App\Activity::count());
     }
 }
