@@ -29,4 +29,12 @@ class Reply extends Model
     {
         return $this->morphMany(Favorite::class, 'favorited');
     }
+
+    public function getRouteAttribute()
+    {
+        return route('threads.show', [
+            'channel' => $this->thread->channel->slug,
+            'thread' => $this->thread->id
+        ]) . "#reply-" . $this->id;
+    }
 }

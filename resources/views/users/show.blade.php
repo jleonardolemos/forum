@@ -13,7 +13,9 @@
             @foreach($dates as $date => $activities)
                 <h3 class="page-header">{{ $date }}</h3>
                 @foreach($activities as $activity)
+                @if(view()->exists('users.activities.' . $activity->type))
                 @include('users.activities.' . $activity->type)
+                @endif
                 @endforeach 
             @endforeach 
             {{--  {{ $threads->links() }}  --}}
