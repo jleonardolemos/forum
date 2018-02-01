@@ -59,4 +59,15 @@ class ReplyTest extends TestCase
         $this->signIn($user2);
         $this->assertFalse($reply->IsFavorite());
     }
+
+    /** @teste*/
+    public function it_has_a_link_to_its_thread()
+    {
+        $reply = create(\App\Reply::class);
+        $this->signIn();
+        $this->assertEquals(
+            $reply->route,
+            $reply->thread->route . '#reply-' . $reply->id
+        );
+    }
 }
