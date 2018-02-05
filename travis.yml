@@ -1,0 +1,17 @@
+language: php
+
+php:
+  - 7.1
+
+branches:
+  - master
+
+install:
+  - composer self-update
+  - composer install --prefer-dist --no-interaction
+  - touch database/database.sqlite
+  - cp .env.travis .env
+  - phpenv rehash
+
+script:
+  - vendor/bin/phpunit
