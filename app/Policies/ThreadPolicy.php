@@ -6,7 +6,7 @@ use App\User;
 use App\Thread;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class ThreadPolice
+class ThreadPolicy
 {
     use HandlesAuthorization;
 

@@ -3,13 +3,10 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class ManageThreadsTest extends TestCase
 {
-
     use DatabaseMigrations;
 
     protected $thread;
@@ -19,7 +16,6 @@ class ManageThreadsTest extends TestCase
         parent::setUp();
         $this->thread = factory(\App\Thread::class)->create();
     }
-
 
     /** @test */
     public function a_user_can_view_all_threads()
@@ -40,7 +36,6 @@ class ManageThreadsTest extends TestCase
         $response->assertSee($this->thread->title);
         $response->assertStatus(200);
     }
-
 
     /** @test */
     public function a_user_can_read_replies_that_are_associated_with_a_thread()
@@ -87,16 +82,16 @@ class ManageThreadsTest extends TestCase
         $this->withExceptionHandling();
         $reply = create(\App\Reply::class);
 
-        #GUEST TEST
+        //GUEST TEST
         $reponse = $this->delete(route('threads.delete', [
             'channel' => $reply->thread->channel->slug,
             'thread' => $reply->thread->id,
         ]), ['id' => $reply->thread->id]);
 
         $reponse->assertRedirect(route('login'));
-        #GUEST TEST
+        //GUEST TEST
 
-        #BAD USER TEST
+        //BAD USER TEST
         $this->signIn(create(\App\User::class));
         $reponse = $this->delete(route('threads.delete', [
             'channel' => $reply->thread->channel->slug,
@@ -104,7 +99,7 @@ class ManageThreadsTest extends TestCase
         ]), ['id' => $reply->thread->id]);
 
         $reponse->assertStatus(403);
-        #BAD USER TEST
+        //BAD USER TEST
     }
 
     /** @test */
