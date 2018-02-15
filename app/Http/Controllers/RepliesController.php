@@ -27,6 +27,14 @@ class RepliesController extends Controller
         return back()->with('flash', 'Reply left');
     }
 
+    public function update(Reply $reply)
+    {
+        $this->authorize('update', $reply);
+        $reply->update([
+            'body' => request('body')
+        ]);
+    }
+
     public function delete($channelSlug, Thread $thread, Reply $reply)
     {
         $this->authorize('delete', $reply);
