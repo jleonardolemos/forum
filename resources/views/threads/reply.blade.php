@@ -29,14 +29,7 @@
         @can('delete', $reply)
         <div class="panel-footer level">
             <button class="btn" @click="editing = true">Edit</button>
-            <form action="{{ route('threads.replies.delete', [
-                'channel' => $reply->thread->channel->slug,
-                'thread' => $reply->thread->id,
-                'reply' => $reply->id,
-            ]) }}" method="post">
-                {{ csrf_field() }} {{ method_field('DELETE') }}
-                <button style="color:red;" class="btn">Delete</button>
-            </form>
+            <button @click="destroy" style="color:red;" class="btn">Delete</button>
         </div>
         @endcan
     </div>

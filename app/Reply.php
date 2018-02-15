@@ -3,17 +3,16 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Activityable;
-use App\Favoritable;
 
 class Reply extends Model
 {
-
     use Favoritable, Activityable;
 
-    protected $guarded = [];
+    protected $fillable = ['thread_id', 'user_id', 'body'];
 
     protected $with = ['owner', 'favorites'];
+
+    protected $appends = ['delete_route'];
 
     public function owner()
     {
@@ -30,11 +29,20 @@ class Reply extends Model
         return $this->morphMany(Favorite::class, 'favorited');
     }
 
+    public function getDeleteRouteAttribute()
+    {
+        return route('threads.replies.delete', [
+            'channel' => $this->thread->channel->slug,
+            'thread' => $this->thread->id,
+            'reply' => $this->id,
+        ]);
+    }
+
     public function getRouteAttribute()
     {
         return route('threads.show', [
             'channel' => $this->thread->channel->slug,
             'thread' => $this->thread->id
-        ]) . "#reply-" . $this->id;
+        ]) . '#reply-' . $this->id;
     }
 }

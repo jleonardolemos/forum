@@ -14,6 +14,12 @@ export default {
             })
             this.editing = false;
             flash('updated')
+        },
+        destroy() {
+            axios.delete(this.attributes.delete_route);
+            $(this.$el).fadeOut(300, () => {
+                flash('deleted')
+            });
         }
     }
 }

@@ -12776,6 +12776,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             });
             this.editing = false;
             flash('updated');
+        },
+        destroy: function destroy() {
+            axios.delete(this.attributes.delete_route);
+            $(this.$el).fadeOut(300, function () {
+                flash('deleted');
+            });
         }
     }
 });
