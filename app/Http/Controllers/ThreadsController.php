@@ -6,11 +6,9 @@ use Illuminate\Http\Request;
 use App\Filters\ThreadFilters;
 use App\Thread;
 use App\Channel;
-use App\User;
 
 class ThreadsController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('auth')->except('index', 'show');
@@ -45,7 +43,6 @@ class ThreadsController extends Controller
 
     public function store(Request $request)
     {
-
         $this->validate($request, [
             'title' => 'required',
             'body' => 'required',

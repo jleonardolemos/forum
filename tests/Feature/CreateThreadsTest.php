@@ -4,12 +4,17 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Auth\AuthenticationException;
 
 class CreateThreadsTest extends TestCase
 {
-
     use DatabaseMigrations;
+
+    /** @test*/
+    public function an_authenticated_user_can_see_the_thread_form()
+    {
+        $this->signIn();
+        $this->get(route('threads.create'))->assertSee('Create a new Thread');
+    }
 
     /** @test*/
     public function an_unauthenticated_user_cant_submit_a_thread()
@@ -28,7 +33,7 @@ class CreateThreadsTest extends TestCase
     {
         $this->signIn();
         $thread = make(\App\Thread::class);
-        
+
         $response = $this->post(route('threads.store'), $thread->toArray());
 
         $this->get($response->headers->get('Location'))->assertSee($thread->body);
