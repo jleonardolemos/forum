@@ -2,6 +2,7 @@
 /nbproject
 /storage/*.key
 /public/hot
+/public/report
 /node_modules
 /public/cache/*
 /public/storage
