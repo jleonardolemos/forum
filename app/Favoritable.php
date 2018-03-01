@@ -2,8 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
 trait Favoritable
 {
     public function favorite()
@@ -13,15 +11,27 @@ trait Favoritable
             $this->favorites()->create(['user_id' => $userId]);
     }
 
+    public function unfavorite()
+    {
+        $this->favorites()
+            ->where('user_id', auth()->user()->id)
+            ->delete();
+    }
+
     public function isFavorite()
     {
         if (auth()->user()) {
-            return !! $this->favorites
+            return !!$this->favorites
                 ->where('user_id', auth()->user()->id)
                 ->count();
         }
 
         return true;
+    }
+
+    public function getIsFavoriteAttribute()
+    {
+        return $this->isFavorite();
     }
 
     public function getFavoritesCountAttribute()

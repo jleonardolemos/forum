@@ -12,7 +12,12 @@ class Reply extends Model
 
     protected $with = ['owner', 'favorites'];
 
-    protected $appends = ['delete_route'];
+    protected $appends = [
+        'delete_route',
+        'is_favorite',
+        'favorite_route',
+        'unfavorite_route',
+    ];
 
     public function owner()
     {
@@ -44,5 +49,15 @@ class Reply extends Model
             'channel' => $this->thread->channel->slug,
             'thread' => $this->thread->id
         ]) . '#reply-' . $this->id;
+    }
+
+    public function getFavoriteRouteAttribute()
+    {
+        return route('replies.favorite', $this->id);
+    }
+
+    public function getUnfavoriteRouteAttribute()
+    {
+        return route('replies.unfavorite', $this->id);
     }
 }
