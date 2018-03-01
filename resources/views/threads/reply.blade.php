@@ -7,11 +7,9 @@
                     }}
                 </h5>
                 <div>
+                @if(auth()->check())
                 <favorite :reply="{{ $reply }}"></favorite>
-                    {{--  <form method="POST" action="{{ route('replies.favorite', $reply->id) }}">
-                        {{ csrf_field() }}
-                        <button class="btn btn-default" {{ $reply->isFavorite() ? 'disabled' : '' }}>{{ $reply->favorites_count }} {{ str_plural('Favorite', $reply->favorites_count) }}</button>
-                    </form>  --}}
+                @endif
                 </div>
             </div>
         </div>
