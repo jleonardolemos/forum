@@ -33,4 +33,13 @@ class favoriteTest extends TestCase
             $reply->id
         );
     }
+
+    /** @teste*/
+    public function it_has_a_count_attribute()
+    {
+        $this->signIn();
+        $reply = create(\App\Reply::class);
+        $reply->favorite();
+        $this->assertEquals(1, $reply->favorites_count);
+    }
 }
