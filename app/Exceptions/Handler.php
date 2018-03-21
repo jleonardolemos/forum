@@ -6,9 +6,6 @@ use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
-/**
- * @codeCoverageIgnore
- */
 class Handler extends ExceptionHandler
 {
     /**

@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers;
 
-/**
- * @codeCoverageIgnore
- */
 class HomeController extends Controller
 {
     /**
